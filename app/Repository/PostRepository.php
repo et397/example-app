@@ -27,4 +27,11 @@
             //新增資料
             return Post::create($data);
         }
+
+        public function update(array $data, $id)
+        {
+            $post = Post::find($id);
+            //更新資料
+            return $post ? $post->update($data) : false;
+        }
     }
