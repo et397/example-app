@@ -2,27 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use app\Repositories\PostRepository;
 use Illuminate\Http\Request;
 
-class PostController extends Controller
+class TestController extends Controller
 {
-
-    protected $postRepository;
-
-    public function __construct(PostRepository $postRepository)
-    {
-        $this->postRepository = $postRepository;
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         //
-        $posts = $this->postRepository->indes();
-        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -47,13 +36,6 @@ class PostController extends Controller
     public function show(string $id)
     {
         //
-        $post = $this->postRepository->findOrFail($id);
-
-        if (! $post) {
-            return redirect()->route('posts.index');
-        }
-
-        return view('posts.show', compact('post'));
     }
 
     /**
