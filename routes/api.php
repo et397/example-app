@@ -1,12 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 #用get方法，導向「/test」的網址，並執行TestController的test方法，回傳頁面
-Route::get('test', 'TestController@test');
+Route::get('/test', [PostController::class, 'index']);
 
 // Route::resource('test', 'TestController');
 

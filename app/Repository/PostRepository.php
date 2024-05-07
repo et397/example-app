@@ -5,10 +5,11 @@
 
     class PostRepository
     {
-        public function index()
+        public function index($perpage, $condition = [])
         {
-            //利用 Post 取出文章，並將結果 return 給 controller
-            return Post::all();
+            
+            //利用 where 條件取出文章，並將結果 return 給 controller
+            return Post::where($condition)->paginate($perpage);
         }
 
         public function findOrFail(string $id)

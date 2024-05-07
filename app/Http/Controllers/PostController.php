@@ -18,10 +18,13 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $posts = $this->postRepository->index();
+        $perpage = $request->input('perpage', 10);
+        $condition = $request->only(['title', 'content']);
+
+        $posts = $this->postRepository->index($perpage, $condition);
 
         if($posts->isEmpty()){
             return response()->json(['message' => 'No posts found'], 404);
@@ -119,7 +122,7 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         //
-        $destroyresult = $this->postRepository->destroy($id);
+        $destroyresult = $this->postRepository->delete($id);
 
         if ($destroyresult) {
             return response()->json(['message' => 'Post deleted'], 200);
