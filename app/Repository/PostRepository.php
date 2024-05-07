@@ -21,4 +21,10 @@
             //用主鍵刪除資料
             return Post::destroy($id);
         }
+
+        public function store(array $data)
+        {
+            //新增資料
+            return Post::create($data);
+        }
     }

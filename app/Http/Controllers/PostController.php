@@ -31,6 +31,7 @@ class PostController extends Controller
     public function create()
     {
         //
+        return view('posts.create');
     }
 
     /**
@@ -39,6 +40,14 @@ class PostController extends Controller
     public function store(Request $request)
     {
         //
+        $post = $this->postRepository->store($request->only('title', 'content'));
+
+        if ($post) {
+            return redirect()->route('posts.show', $post->id);
+        }
+
+        return back();
+
     }
 
     /**
@@ -87,5 +96,5 @@ class PostController extends Controller
         return back();
     }
 
-    
+
 }
