@@ -16,4 +16,9 @@
             //用主鍵找資料
             return Post::find($id);
         }
+
+        public function delete($id){
+            //用主鍵刪除資料
+            return Post::destroy($id);
+        }
     }

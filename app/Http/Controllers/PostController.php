@@ -78,5 +78,14 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         //
+        $result = $this->postRepository->destroy($id);
+
+        if ($result) {
+            return redirect()->route('posts.index');
+        }
+
+        return back();
     }
+
+    
 }
