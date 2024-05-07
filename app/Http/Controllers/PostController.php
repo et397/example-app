@@ -21,7 +21,7 @@ class PostController extends Controller
     public function index()
     {
         //
-        $posts = $this->postRepository->indes();
+        $posts = $this->postRepository->index();
         return view('posts.index', compact('posts'));
     }
 
