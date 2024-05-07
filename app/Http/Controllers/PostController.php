@@ -22,7 +22,13 @@ class PostController extends Controller
     {
         //
         $posts = $this->postRepository->index();
-        return view('posts.index', compact('posts'));
+
+        if($posts->isEmpty()){
+            return response()->json(['message' => 'No posts found'], 404);
+        };
+
+        return response()->json($posts);
+        // return view('posts.index', compact('posts'));
     }
 
     /**
@@ -31,7 +37,6 @@ class PostController extends Controller
     public function create()
     {
         //
-        return view('posts.create');
     }
 
     /**
@@ -39,14 +44,20 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $post = $this->postRepository->store($request->only('title', 'content'));
+        //對要求進行驗證
+        $validatedData  = $request->validate([
+            'title' => 'bail|required|uique:posts|max:255',
+            'content' => 'required'
+        ]);
 
-        if ($post) {
-            return redirect()->route('posts.show', $post->id);
+        //從驗證過的要求中取出所有數據並存儲
+        $post = $this->postRepository->store($validatedData->all());
+        // $request->validated();
+        if ($post->isEmpty()) {
+            return response()->json(['message' => 'Post created'], 201);
         }
 
-        return back();
+        return response()->json(['message' => 'Post not created'], 500);
 
     }
 
@@ -58,26 +69,28 @@ class PostController extends Controller
         //
         $post = $this->postRepository->findOrFail($id);
 
-        if (! $post) {
-            return redirect()->route('posts.index');
+        if ($post->isEmpty()) {
+            return response()->json(['message' => 'Post not found'], 404);
         }
 
-        return view('posts.show', compact('post'));
+        return response()->json($post);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
+
+    //在後端不會返回視圖
     public function edit(string $id)
     {
         //
-        $post = $this->postRepository->findOrFail($id);
+        // $post = $this->postRepository->findOrFail($id);
 
-        if (! $post) {
-            return redirect()->route('posts.index');
-        }
+        // if (! $post) {
+        //     return redirect()->route('posts.index');
+        // }
 
-        return view('posts.edit', compact('post'));
+        // return view('posts.edit', compact('post'));
     }
 
     /**
@@ -85,14 +98,18 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-        $result = $this->postRepository->update($id, $request->only('title', 'content'));
+        $validata = $request->validate([
+            'title' => 'bail|required|uique:posts|max:255',
+            'content' => 'required'
+        ]);
+        //回傳執行別為boolean
+        $updateresult = $this->postRepository->update($id, $validata->all());
 
-        if (!$result) {
-            return redirect()->route('posts.index');
+        if (!$updateresult){
+            return response()->json(['message' => 'Post not updated'], 500);
         }
 
-        return redirect()->route('posts.show', $id);
+        return response()->json(['message' => 'Post updated'], 200);
 
     }
 
@@ -102,13 +119,13 @@ class PostController extends Controller
     public function destroy(string $id)
     {
         //
-        $result = $this->postRepository->destroy($id);
+        $destroyresult = $this->postRepository->destroy($id);
 
-        if ($result) {
-            return redirect()->route('posts.index');
+        if ($destroyresult) {
+            return response()->json(['message' => 'Post deleted'], 200);
         }
 
-        return back();
+        return response()->json(['message' => 'Post not deleted'], 500);
     }
 
 
