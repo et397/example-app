@@ -6,8 +6,10 @@ use App\Http\Controllers\PostController;
 Route::get('/', function () {
     return view('welcome');
 });
-#用get方法，導向「/test」的網址，並執行TestController的test方法，回傳頁面
+#用get方法，導向「/post」的網址，並執行PostController的index方法，回傳頁面
 Route::get('/post', [PostController::class, 'index']);
+
+Route::post(('/post'), [PostController::class, 'store']);
 
 // Route::resource('test', 'TestController');
 
