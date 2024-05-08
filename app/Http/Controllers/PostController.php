@@ -20,21 +20,19 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        
         $perpage = $request->input('perpage', 10);
-        $filter = $request->input('orderby', ['id', 'desc']);
+        $order = $request->input('orderby', [ 'id' => 'desc' ]);
 
         //除了 perpage 以外的所有條件
         $condition = $request->except(['perpage', 'filter']);
 
         // $condition = $request->only(['title', 'content']);
 
-        $posts = $this->postRepository->index($perpage, $condition, $filter);
+        $posts = $this->postRepository->index($perpage, $condition, $order);
 
         if($posts->isEmpty()){
             return response()->json(['message' => 'No Content'], 204);
         };
-
         return response()->json($posts);
         // return view('posts.index', compact('posts'));
     }
@@ -59,7 +57,7 @@ class PostController extends Controller
         ]);
 
         //從驗證過的要求中取出所有數據並存儲
-        $post = $this->postRepository->store($validatedData->all());
+        $post = $this->postRepository->store($validatedData);
         // $request->validated();
         if ($post->isEmpty()) {
             return response()->json(['message' => 'Post created'], 201);

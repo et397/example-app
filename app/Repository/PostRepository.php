@@ -5,8 +5,9 @@
 
     class PostRepository
     {
-        public function index($perpage, $condition = [], $filter = [])
+        public function index($perpage, $condition = [], $order = [])
         {
+            
             //建立查詢
             $query = Post::query();
 
@@ -21,7 +22,13 @@
             //不用Pagination
             // return Post::where($condition)->offset($perpage * $page)->limit($perpage)->get();
             //用Pagination
-            return POST::where($condition)->oderBy(array_key($field), array_values($filter))->paginate($perpage);
+            if(!empty($order)){
+                foreach($order as $field => $value){
+                    $query->orderBy($field, $value);
+                }
+            };
+
+            return $query->paginate($perpage);
         }
 
         public function findOrFail(string $id)
