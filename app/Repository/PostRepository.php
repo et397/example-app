@@ -7,7 +7,6 @@
     {
         public function index($perpage, $condition = [], $order = [])
         {
-            
             //建立查詢
             $query = Post::query();
 

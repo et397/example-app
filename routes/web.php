@@ -6,10 +6,15 @@ use App\Http\Controllers\PostController;
 Route::get('/', function () {
     return view('welcome');
 });
+//授權csrf token
+Route::get('/csrf-token', function () {
+    return csrf_token();
+});
+
 #用get方法，導向「/post」的網址，並執行PostController的index方法，回傳頁面
 Route::get('/post', [PostController::class, 'index']);
 
-Route::post(('/post'), [PostController::class, 'store']);
+Route::post('/post', [PostController::class, 'store']);
 
 // Route::resource('test', 'TestController');
 

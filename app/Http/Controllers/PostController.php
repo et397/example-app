@@ -50,6 +50,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        
         //對要求進行驗證
         $validatedData  = $request->validate([
             'title' => 'bail|required|uique:posts|max:255',
@@ -63,7 +64,8 @@ class PostController extends Controller
             return response()->json(['message' => 'Post created'], 201);
         }
 
-        return response()->json(['message' => 'Post not created'], 500);
+        // return response()->json(['message' => 'Post not created'], 500);
+        return response()->json($post);
 
     }
 
