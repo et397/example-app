@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use app\Repositories\PostRepository;
+use App\Repository\PostRepository;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -20,14 +20,19 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        //
+        
         $perpage = $request->input('perpage', 10);
-        $condition = $request->only(['title', 'content']);
+        $filter = $request->input('orderby', ['id', 'desc']);
 
-        $posts = $this->postRepository->index($perpage, $condition);
+        //除了 perpage 以外的所有條件
+        $condition = $request->except(['perpage', 'filter']);
+
+        // $condition = $request->only(['title', 'content']);
+
+        $posts = $this->postRepository->index($perpage, $condition, $filter);
 
         if($posts->isEmpty()){
-            return response()->json(['message' => 'No posts found'], 404);
+            return response()->json(['message' => 'No Content'], 204);
         };
 
         return response()->json($posts);

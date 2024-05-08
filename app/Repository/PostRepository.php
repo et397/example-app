@@ -1,15 +1,27 @@
 <?php
-    namespace App\Repositories;
+    namespace App\Repository;
 
-    use app\Models\Entities\Post;
+    use App\Models\Entities\Post;
 
     class PostRepository
     {
-        public function index($perpage, $condition = [])
+        public function index($perpage, $condition = [], $filter = [])
         {
-            
+            //建立查詢
+            $query = Post::query();
+
+            //條件查詢
+            if(!empty($condition)){
+                foreach($condition as $field => $value){
+                    $query->where($field, $value);
+                }
+            };
+
             //利用 where 條件取出文章，並將結果 return 給 controller
-            return Post::where($condition)->paginate($perpage);
+            //不用Pagination
+            // return Post::where($condition)->offset($perpage * $page)->limit($perpage)->get();
+            //用Pagination
+            return POST::where($condition)->oderBy(array_key($field), array_values($filter))->paginate($perpage);
         }
 
         public function findOrFail(string $id)
